@@ -1,0 +1,23 @@
+#
+# ローカル動作用の構成
+#
+---
+version: '3'
+services:
+  redis:
+    image: "redis:6.0.9-alpine"
+    ports:
+      - "16379:6379"
+  db:
+    image: "postgres:13.1-alpine"
+    volumes:
+      - ./test/PostgreSQL/initdb:/docker-entrypoint-initdb.d/
+      - $PWD/_ddl:/tmp/PostgreSQL/dump/
+    container_name: postgres
+    restart: always
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_USER: testing
+      POSTGRES_PASSWORD: testing
+      POSTGRES_DB: testing
